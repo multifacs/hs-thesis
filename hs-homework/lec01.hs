@@ -1,4 +1,5 @@
 import Data.Char
+
 -------------------------------------------------
 -- Конспект лекции 1 от 09.02.2023
 -------------------------------------------------
@@ -67,7 +68,7 @@ import Data.Char
 -- :unset +t включить режим печатания типа
 -- :info (+), :i (+) напечатать информацию об идентификаторе
 -- Арифметические операции
--- (+), (-), (*), (/), div, mod, (^), 
+-- (+), (-), (*), (/), div, mod, (^),
 -- sum, product, max, min, maximum, minimum, even, odd, gcd, lcm
 -- Предикаты и логические операции
 -- (>), (<), (==), (/=), (>=), (<=), (&&), (||), not, and, or
@@ -113,7 +114,7 @@ import Data.Char
 
 fact :: Integer -> Integer
 fact 0 = 1
-fact x = x * fact (x-1)
+fact x = x * fact (x - 1)
 
 -- Ограничения (guards)
 sign :: Double -> Double
@@ -127,17 +128,17 @@ sign x
 solve :: Double -> Double -> Double -> [Double]
 solve a b c
   | d < 0 = []
-  | otherwise = [(-b + sqrt d)/2/a, (-b - sqrt d)/2/a]
-    where
-      d = b * b - 4 * a * c
+  | otherwise = [(-b + sqrt d) / 2 / a, (-b - sqrt d) / 2 / a]
+  where
+    d = b * b - 4 * a * c
 
 -- Другой вариант локального определения
 -- Вместо ограничений используется if
 -- Важно: if возвращает значение, а не вызывается ради побочного эффекта
 solve1 :: Double -> Double -> Double -> [Double]
 solve1 a b c =
-  let d = b * b - 4 * a * c in
-    if d < 0 then [] else [(-b + sqrt d)/2/a, (-b - sqrt d)/2/a]
+  let d = b * b - 4 * a * c
+   in if d < 0 then [] else [(-b + sqrt d) / 2 / a, (-b - sqrt d) / 2 / a]
 
 -- В строке интерпретатора (в отличие от текста программы)
 -- команды, занимающие несколько строк следует заключать в
@@ -170,6 +171,7 @@ safediv x y = x / y
 -- Функция с одним аргументом, являющемся кортежем из двух элементов
 plus :: (Int, Int) -> Int
 plus (x, y) = x + y
+
 -- Менее идиоматично
 -- plus z = fst z + snd z
 
@@ -242,24 +244,26 @@ inc = (+) 1
 -- в начале файла.
 
 productLast3 :: Int -> Int
-productLast3 n = let s = show n
-              len = length s
-              [x1, x2, x3] = drop (len-3) s in
-            digitToInt x1 * digitToInt x2 * digitToInt x3
+productLast3 n =
+  let s = show n
+      len = length s
+      [x1, x2, x3] = drop (len - 3) s
+   in digitToInt x1 * digitToInt x2 * digitToInt x3
 
 productLast3' :: Integer -> Integer
-productLast3' n = n1 * n2 * n3 where
-  n1 = n `mod` 10
-  m = n `div` 10
-  n2 = m `mod` 10
-  n3 = m `div` 10 `mod` 10
+productLast3' n = n1 * n2 * n3
+  where
+    n1 = n `mod` 10
+    m = n `div` 10
+    n2 = m `mod` 10
+    n3 = m `div` 10 `mod` 10
 
 -- 6. Напишите функцию Int -> Char, которая переводит цифру в символ.
 -- Функция должна вызывать функцию error, аргументом которой является
 -- сообщение об ошибке, если аргумент не из отрезка [0..9].
 
 -- Решено на занятии.
-  
+
 intToChar :: Int -> Char
 intToChar 0 = '0'
 intToChar 1 = '1'
