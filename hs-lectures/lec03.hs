@@ -173,6 +173,7 @@ arithSeq start diff end = [start, start + diff .. end]
 
 -- Пример: быстрая сортировка
 
+qsort :: Ord a => [a] -> [a]
 qsort [] = []
 qsort (x : xs) =
   qsort [y | y <- xs, y <= x] ++ [x] ++ qsort [y | y <- xs, y > x]
@@ -180,6 +181,7 @@ qsort (x : xs) =
 -- Следующее определение проще написать, чем понять, как оно работает.
 -- Во всяком случае, оно правильно с математической точки зрения.
 
+fibs :: [Integer]
 fibs = 0 : 1 : [x + y | (x, y) <- zip fibs (tail fibs)]
 -- или
 -- fibs = 0 : 1 : zipWith (+) fibs (tail fibs)
@@ -215,6 +217,7 @@ fib n = fib (n - 1) + fib (n - 2)
 
 -- Общий вид: fib n f_n f_{n+1}
 
+fibIter :: (Eq t1, Num t1, Num t2) => t1 -> t2
 fibIter n = fib n 0 1 where
   fib 0 x _ = x
   fib n x y = fib (n - 1) y (x + y)
@@ -234,6 +237,7 @@ merge l1@(x : xs) l2@(y : ys)
 -- чем на единицу. В определении можно использовать стандартные
 -- функции. См. особенно функции take, drop и splitAt в описании Prelude.
 
+halve :: [a] -> ([a], [a])
 halve xs = splitAt (div (length xs) 2) xs
 
 -- 4. Используя merge и halve, напишите функцию msort :: [Int] -> [Int],
