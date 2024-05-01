@@ -1,4 +1,5 @@
 import System.Clock
+import Text.Read (readMaybe)
 
 fibonacci :: Integer -> Integer
 fibonacci 0 = 0
@@ -30,11 +31,28 @@ msort xs =
     let (l1, l2) = halve xs in
         mergeLists (msort l1) (msort l2)
 
+-- Measure the time of function execution
+measureTime :: IO () -> IO TimeSpec
+measureTime action = do
+    start <- getTime Monotonic
+    action
+    end <- getTime Monotonic
+    return $ diffTimeSpec end start
 
 main :: IO ()
 main = do
-    print (fibonacci 40)
 
+    putStrLn "Enter an integer:"
+    input <- getLine
+    case reads input of
+        [(x, "")] -> putStrLn $ "You entered: " ++ show (x :: Int)
+        _         -> putStrLn "Invalid input. Please enter an integer."
+
+    let x = read input :: Integer
+
+    time <- measureTime $ print ("fib = " ++ show (fibonacci x))
+    putStrLn $ "Time taken: " ++ show (div (toNanoSecs time) (10 ^ 9)) ++ " s"
+    
     let a = [1, 2, 3]
     let b = [4, 5, 6]
     print (mergeLists a b)
