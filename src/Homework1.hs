@@ -1,3 +1,5 @@
+module Homework1 where
+
 import Data.Char
 
 -------------------------------------------------
@@ -108,8 +110,3 @@ intToChar'' n = let [c] = show n in c
 
 n :: Int
 n = mod 1 2
-
-main :: IO ()
-main = do
-    print "mod "
-    print (mod 12 2)
