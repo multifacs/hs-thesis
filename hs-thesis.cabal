@@ -29,6 +29,7 @@ library
       Homework2
       Homework3
       Homework4
+      LambdaReduction
   other-modules:
       Paths_hs_thesis
   autogen-modules:
