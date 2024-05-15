@@ -605,3 +605,76 @@ The final result should be `Const 9`.
 ```
 
 This implementation of `cbv` correctly models the call-by-value evaluation for our lambda calculus expressions. Adjustments may be necessary for more complex or different variations of lambda calculus and evaluation strategies.
+
+
+Для начала разберёмся с основными понятиями и определим, в каком контексте мы будем проводить эксперименты по редукции термов. Мы будем работать с термами в лямбда-исчислении, которое является формальной системой для описания функций и их вычисления.
+
+В лямбда-исчислении термы определяются следующим образом:
+
+1. **Переменная**, например \( x \), является термом.
+2. **Абстракция**, например \( \lambda x. t \), где \( t \) — терм, является термом.
+3. **Аппликация**, например \( (t_1 \ t_2) \), где \( t_1 \) и \( t_2 \) — термы, является термом.
+
+Редукция термов основывается на применении **бета-редукции**, которая определяется как:
+
+\[ (\lambda x. t_1) t_2 \rightarrow t_1[x := t_2] \]
+
+где \( t_1[x := t_2] \) означает терм \( t_1 \), в котором все свободные вхождения \( x \) заменены на \( t_2 \).
+
+### Задача
+
+Наша задача — найти самую длинную цепочку бета-редукций для термов определенного размера. Размер терма мы будем измерять как количество всех символов в записи терма, включая переменные, лямбды, точки и скобки.
+
+### Примеры термов и их редукций
+
+Давайте рассмотрим простой терм и покажем его редукции:
+
+1. Терм: \( (\lambda x. (\lambda y. (x \ y))) (\lambda z. z) \)
+   
+   Это терм размера 20.
+
+   Редукция:
+
+   \[ (\lambda x. (\lambda y. (x \ y))) (\lambda z. z) \rightarrow (\lambda y. ((\lambda z. z) \ y)) \]
+
+   Продолжаем редукцию:
+
+   \[ (\lambda y. ((\lambda z. z) \ y)) \rightarrow (\lambda y. y) \]
+
+   Эта цепочка редукций имеет длину 2.
+
+### Эксперимент
+
+Для более сложного эксперимента ищем самую длинную цепочку для термов размера до 10.
+
+1. Терм: \( (\lambda x. x) (\lambda x. x) \)
+   
+   Размер: \( 13 \)
+
+   Редукция:
+
+   \[ (\lambda x. x) (\lambda x. x) \rightarrow \lambda x. x \]
+
+   Длина цепочки: 1
+
+2. Терм: \( (\lambda x. \lambda y. x (y x)) (\lambda z. z) \)
+   
+   Размер: \( 26 \)
+
+   Редукция:
+
+   \[ (\lambda x. \lambda y. x (y x)) (\lambda z. z) \rightarrow \lambda y. (\lambda z. z) (y (\lambda z. z)) \]
+
+   Продолжаем:
+
+   \[ \lambda y. (\lambda z. z) (y (\lambda z. z)) \rightarrow \lambda y. y (\lambda z. z) \]
+
+   Длина цепочки: 2
+
+3. Терм: \( (\lambda x. \lambda y. x (y x)) (\lambda x. \lambda y. x) \)
+   
+   Размер: \( 28 \)
+
+   Редукция:
+
+   \[ (\lambda x. \lambda y. x (y x)) (\lambda x. \lambda y. x) \rightarrow \lambda y. (\lambda x. \lambda y. x) (y (\lambda x. \lambda y. x)) \]
