@@ -629,17 +629,17 @@ This implementation of `cbv` correctly models the call-by-value evaluation for o
 
 Давайте рассмотрим простой терм и покажем его редукции:
 
-1. Терм: \( (\lambda x. (\lambda y. (x \ y))) (\lambda z. z) \)
+1. Терм: $( (\lambda x. (\lambda y. (x \ y))) (\lambda z. z) )$
    
    Это терм размера 20.
 
    Редукция:
 
-   \[ (\lambda x. (\lambda y. (x \ y))) (\lambda z. z) \rightarrow (\lambda y. ((\lambda z. z) \ y)) \]
+   $[ (\lambda x. (\lambda y. (x \ y))) (\lambda z. z) \rightarrow (\lambda y. ((\lambda z. z) \ y)) ]$
 
    Продолжаем редукцию:
 
-   \[ (\lambda y. ((\lambda z. z) \ y)) \rightarrow (\lambda y. y) \]
+   $[ (\lambda y. ((\lambda z. z) \ y)) \rightarrow (\lambda y. y) ]$
 
    Эта цепочка редукций имеет длину 2.
 

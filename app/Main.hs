@@ -122,6 +122,58 @@ cbv (Plus t1 t2) =
       (Const n1, Const n2) -> Const (n1 + n2)
       _ -> Plus t1' t2'
 
+-- \s\z. z
+churchZero :: Term
+churchZero = Lambda ('s', 0) (Lambda ('z', 0) (Var ('z', 0)))
+
+-- plus = λm. λn. λs. λz. m s (n s z)
+plusChurch :: Term
+plusChurch =
+  Lambda ('m', 0) (Lambda ('n', 0) (Lambda ('s', 0) (Lambda ('z', 0)
+    (App (App (Var ('m', 0)) (Var ('s', 0)))
+      (App (App (Var ('n', 0)) (Var ('s', 0))) (Var ('z', 0)))))))
+
+-- times = λ m. λ n. m (plus n) 0
+timesChurch :: Term
+timesChurch =
+  Lambda ('m', 0) (Lambda ('n', 0)
+    (App (App (Var ('m', 0)) (App plusChurch (Var ('n', 0)))) churchZero))
+
+intToChurch :: Int -> Term
+intToChurch n =
+  Lambda ('s', 0) (Lambda ('z', 0) $ iterate (App (Var ('s', 0))) (Var ('z', 0)) !! n)
+ 
+-- Пример: intToChurch 3 = \s\z. s (s (s z))
+ 
+-- Чтобы перевести терм \s\z. s^n z в n, применяем его к функции
+-- прибавления единицы и начальному значению 0, затем вычисляем
+-- значение полученного терма.
+
+churchToInt :: Term -> Int
+churchToInt t =
+  let Const n = cbv (App (App t (Lambda ('x', 0) (Plus (Var ('x', 0)) (Const 1)))) (Const 0)) in n
+ 
+checkOp :: Term -> Int -> Int -> Int
+checkOp t m n = churchToInt $ App (App t (intToChurch n)) (intToChurch m)
+
+churchOne :: Term
+churchOne = Lambda ('s', 1) 
+              (Lambda ('z', 2) 
+                (App (Var ('s', 1)) (Var ('z', 2))))
+
+churchTwo :: Term
+churchTwo = Lambda ('s', 1) 
+              (Lambda ('z', 2) 
+                (App (Var ('s', 1)) 
+                  (App (Var ('s', 1)) (Var ('z', 2)))))
+
+churchThree :: Term
+churchThree = Lambda ('s', 1) 
+               (Lambda ('z', 2) 
+                 (App (Var ('s', 1)) 
+                   (App (Var ('s', 1)) 
+                     (App (Var ('s', 1)) (Var ('z', 2))))))
+
 main :: IO ()
 main = do
   -- putStrLn "Enter an integer:"
@@ -164,6 +216,33 @@ main = do
   let replacedTerm = replace oldId newId term
   print replacedTerm
 
+  putStr "\ns subst\n"
   let s = subst ('x', 0) (Var ('x', 1)) t1
   print s
 
+  putStr "\n"
+  putStr ("Church's one: \n")
+  print (churchOne)
+
+  putStr "\n"
+  putStr "Church's two:\n"
+  print (churchTwo)
+
+  putStr "\n"
+  putStr "Church's three:\n"
+  print (churchThree)
+
+  putStr "\n"
+  print plusChurch
+
+  putStr "\n"
+  let subts1 = (subst ('m', 0) churchOne plusChurch)
+  print subts1
+
+  putStr "\n"
+  let subts2 = (subst ('n', 0) churchTwo subts1)
+  print subts2
+
+  print (cbv subts2)
+
+  print (churchToInt churchThree)
